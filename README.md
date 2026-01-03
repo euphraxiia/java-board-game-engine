@@ -1,10 +1,10 @@
 # Java Board Game Engine - Tic-Tac-Toe
 
-A command-line Tic-Tac-Toe game implementation in Java, demonstrating clean object-oriented design principles and separation of concerns. This project showcases how game logic can be completely decoupled from the user interface layer, making the core engine reusable across different interfaces.
+A Tic-Tac-Toe game implementation in Java with both command-line and graphical user interfaces, demonstrating clean object-oriented design principles and separation of concerns. This project showcases how game logic can be completely decoupled from the user interface layer, making the core engine reusable across different interfaces.
 
 ## Overview
 
-This project implements a complete Tic-Tac-Toe game with two modes: player versus player and player versus computer. The computer player uses the Minimax algorithm to play optimally. The architecture is designed with a clear separation between the game logic layer (Board, GameEngine, Player) and the presentation layer (TicTacToeCLI), allowing the core engine to be reused with different interfaces such as a GUI or web interface.
+This project implements a complete Tic-Tac-Toe game with two modes: player versus player and player versus computer. The computer player uses the Minimax algorithm to play optimally. The architecture is designed with a clear separation between the game logic layer (Board, GameEngine, Player) and the presentation layer (TicTacToeCLI, GameGUI), allowing the core engine to be reused with different interfaces.
 
 ## How to Compile and Run
 
@@ -41,6 +41,33 @@ The game will prompt you to select a game mode:
 
 During gameplay, enter moves as two numbers separated by a space (e.g., "1 2" for row 1, column 2). Rows and columns are numbered 0-2.
 
+### GUI Mode
+
+The game also includes a graphical user interface built with Java Swing. To run the GUI version:
+
+```bash
+java -cp out tictactoe.GameGUI
+```
+
+The GUI opens a setup dialog where you can:
+- Choose between Player vs Player or Player vs Computer modes
+- Enter custom player names (defaults to "Player 1" and "Player 2")
+- Start the game with a click
+
+The GUI features:
+- A soft pastel colour scheme (light pink, light purple, lavender, cream, and white) for a pleasant, friendly aesthetic
+- A 500x600 pixel rectangular window with a clean, modern layout
+- A 3x3 grid of interactive buttons for making moves
+- Visual distinction between X (pink) and O (purple) marks
+- Current player turn indicator and game status display
+- Score tracking across multiple games (wins and draws)
+- Winning line highlighting when a game ends
+- New Game button to reset and play again
+- Smooth visual feedback with hover effects on empty cells
+- Computer player moves with a brief delay for better visual flow
+
+The GUI maintains the same clean architecture as the CLI version - all game logic remains in the GameEngine, with the GUI acting purely as a visual presentation layer. You can switch between CLI and GUI modes without any changes to the core game logic classes.
+
 ### Running Tests
 
 To compile and run tests (requires JUnit 4 on classpath):
@@ -61,9 +88,9 @@ Note: You'll need to download JUnit 4 and Hamcrest Core JAR files and adjust the
 
 The core principle behind this design is **separation of concerns**. The game logic is completely independent of any user interface implementation. This means:
 
-- The `Board`, `GameEngine`, and `Player` classes contain no references to `System.out`, `Scanner`, or any I/O operations
-- The CLI layer (`TicTacToeCLI`) is a thin wrapper that handles user input and output, delegating all game decisions to the engine
-- The engine could theoretically be used with a GUI, web interface, or even an API without modification
+- The `Board`, `GameEngine`, and `Player` classes contain no references to `System.out`, `Scanner`, Swing components, or any I/O operations
+- The presentation layers (`TicTacToeCLI` and `GameGUI`) are thin wrappers that handle user input and output, delegating all game decisions to the engine
+- The engine is used by both the CLI and GUI interfaces, demonstrating the reusability of the architecture
 
 This separation makes the code more testable, maintainable, and demonstrates understanding of clean architecture principles. When you can test game logic without needing to mock console I/O, you know the separation is working correctly.
 
@@ -106,11 +133,20 @@ This separation makes the code more testable, maintainable, and demonstrates und
 #### Presentation Layer
 
 **TicTacToeCLI**
-- Handles all user input and output
+- Handles all user input and output for command-line interface
 - Parses user input into Move objects
-- Displays the board state
+- Displays the board state in text format
 - Delegates game logic to GameEngine
 - Provides game loop and user interaction flow
+
+**GameGUI**
+- Handles all user input and output for graphical interface
+- Uses Java Swing components (JFrame, JPanel, JButton) for visual presentation
+- Converts user clicks into Move objects
+- Displays the board state visually with a pastel colour scheme
+- Delegates game logic to GameEngine
+- Manages visual feedback, score tracking, and game state display
+- Handles computer player turns with timed delays for smooth interaction
 
 ### Enums
 
@@ -160,7 +196,6 @@ The architecture took some refactoring to get right. Initially, I had some game 
 
 This architecture makes several extensions straightforward:
 
-- **GUI Interface**: Create a Swing or JavaFX GUI that uses the same GameEngine, replacing TicTacToeCLI with a GUI controller
 - **Different Board Sizes**: Extend Board to support NxN boards (would require updating win detection logic)
 - **AI Difficulty Levels**: Modify ComputerPlayer to use simpler algorithms (random moves, first available) or add depth limiting to Minimax for easier difficulty
 - **Network Play**: Add network communication layer that uses GameEngine for local game state

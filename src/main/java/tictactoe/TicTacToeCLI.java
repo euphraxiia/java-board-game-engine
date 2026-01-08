@@ -181,7 +181,7 @@ public class TicTacToeCLI {
         
         if ("2".equals(choice)) {
             playerX = new HumanPlayer(CellState.X, "Player 1");
-            playerO = new ComputerPlayer(CellState.O, "Computer");
+            playerO = new ComputerPlayer(CellState.O, "Computer", Difficulty.HARD);
         } else {
             playerX = new HumanPlayer(CellState.X, "Player 1");
             playerO = new HumanPlayer(CellState.O, "Player 2");
